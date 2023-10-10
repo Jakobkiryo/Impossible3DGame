@@ -12,12 +12,21 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-    
+
+    private void FixedUpdate()
+    {
+        Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+        if (rigidbody.velocity.y < -.1f)
+        {
+            rigidbody.AddForce(0,-1,0);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Jump")) 
+        if(Input.GetButtonDown("Jump") && isTochingGround()) 
         {
             
             Rigidbody rigidbody = gameObject
@@ -26,5 +35,14 @@ public class PlayerController : MonoBehaviour
         }
         
         transform.Translate(0, 0, speed);
+    }
+
+    bool isTochingGround()
+    {
+        int layermask = LayerMask.GetMask("Ground");
+        return Physics.CheckBox(transform.position, 
+            transform.lossyScale / 1.99f,transform.rotation, layermask);
+        
+        return true;
     }
 }
